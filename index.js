@@ -77,7 +77,7 @@ class Grid {
         return column;
     }
 
-    sector(x, y) {
+    sector(cell_x, cell_y) {
         // It's a horrible bodge, I bet there is a better solution (or at least a prettier one)
         let start_x = 0;
         let start_y = 0;
@@ -85,24 +85,19 @@ class Grid {
         let end_x = 0;
         let end_y = 0;
 
-        if (x < 3) {
-            start_x = 0;
-            end_x = 2;
-        } else if (x > 2 && x < 6) {
-            start_x = 3;
-            end_x = 5;
-        } else if (x > 5) {
-            start_x = 6;
-            end_x = 8;
+        if (cell_x < 3) {
+            start_x = 0; end_x = 2;
+        } else if (cell_x > 2 && cell_x < 6) {
+            start_x = 3; end_x = 5;
+        } else if   (cell_x > 5) {
+            start_x = 6; end_x = 8;
         }
 
-        if (y < 3) {
-            start_y = 0;
-            end_y = 2;
-        } else if (y > 2 && y < 6) {
-            start_y = 3;
-            end_y = 5;
-        } else if (x > 5) {
+        if (cell_y < 3) {
+            start_y = 0; end_y = 2;
+        } else if (cell_y > 2 && cell_y < 6) {
+            start_y = 3; end_y = 5;
+        } else if (cell_y > 5) {
             start_y = 6;
             end_y = 8;
         }
@@ -128,6 +123,18 @@ class Grid {
         return this.cellCount.height;
     }
 
+    get plain() {
+        let plain = [];
+        for (let x = 0; x < this.width; x++) {
+            plain[x] = []
+            for (let y = 0; y < this.height; y++) {
+                plain[x][y] = this.grid[x][y].value;
+            }
+        }
+
+        return plain;
+    }
+
 
 }
 
@@ -144,7 +151,6 @@ let sudoku = new Grid([
     [9, 0, 4, 0, 7, 0, 6, 0, 0]
 ])
 
-//console.log(sudoku.grid[6][3].sector)
 
 solve(sudoku).then((sudoku) => {
     printable.create(sudoku).then((p) => {

@@ -1,18 +1,24 @@
+const fs = require('fs');
+
+let { create } = require('./printable');
 
 exports.solve = async (sudoku) => {
     sudoku = findPossibles(sudoku);
-    for (let x = 0; x < sudoku.width; x++) {
-        for (let y = 0; y < sudoku.height; y++) {
-            if (sudoku.grid[x][y].value == 0) {
-                if (sudoku.grid[x][y].possibleValues.length == 1) {
-                    console.log(x, y)
-                    sudoku.grid[x][y].value = sudoku.grid[x][y].possibleValues[0];
-                    sudoku.grid[x][y].possibleValues = [];
-                }
-            }
+    let sole = true;
+    while (sole) {
+        console.log("checking soles");
+        let previousPlain = sudoku.plain
+        sudoku = soleCandidates(sudoku);
+        if (sudoku.plain.toString() == previousPlain.toString()) {
+            console.log("No soles left");
+            sole = false;
         }
+        console.log(sudoku.plain)
+        /*create(sudoku).then(s => {
+            fs.writeFile(`./images/${new Date().toISOString()}`, s.toBuffer());
+        })*/
     }
-    sudoku = findPossibles(sudoku);
+
     return sudoku;
 }
 
@@ -48,5 +54,20 @@ function findPossibles(sudoku) {
         }
     }
 
+    return sudoku;
+}
+
+function soleCandidates(sudoku) {
+    for (let x = 0; x < sudoku.width; x++) {
+        for (let y = 0; y < sudoku.height; y++) {
+            if (sudoku.grid[x][y].value == 0) {
+                if (sudoku.grid[x][y].possibleValues.length == 1) {
+                    sudoku.grid[x][y].value = sudoku.grid[x][y].possibleValues[0];
+                    sudoku.grid[x][y].possibleValues = [];
+                }
+            }
+        }
+    }
+    sudoku = findPossibles(sudoku);
     return sudoku;
 }
