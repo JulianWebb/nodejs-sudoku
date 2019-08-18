@@ -82,7 +82,7 @@ exports.create = async (sudoku, settings = {}) => {
         for (let y = 0; y < sudoku.height; y++) {
             for (let c = 0; c < 3; c++) {
                 for (let r = 0; r < 3; r++) {
-                    if (sudoku.grid[x][y].possibleValues.includes(pos[c][r])) {
+                    if (sudoku.grid[x][y].candidates.includes(pos[c][r])) {
                         let pos_x = padding - (cellWidth / 2) - (cellWidth / 4) + (cellWidth * (x + 1)) + ((cellWidth / 4) * c);
                         let pos_y = padding - (cellWidth / 2) - (cellWidth / 4) + (cellWidth * (y + 1)) + ((cellWidth / 4) * r)
                         ctx.fillText(pos[c][r], pos_x, pos_y)
